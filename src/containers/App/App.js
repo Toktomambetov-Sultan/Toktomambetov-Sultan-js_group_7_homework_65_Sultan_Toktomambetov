@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./App.css";
 import orderAxios from "../../orderAxios";
 import { useEffect } from "react";
+import withPreloader from "../../hoc/withPreloader/withPreloader";
 
 function App() {
   const [quotes, setQoutes] = useState([]);
@@ -21,11 +22,13 @@ function App() {
   console.log(quotes);
   return (
     <div className="App">
-      {quotes.map((quote) => (
-        <li key={quote.id}>{quote.text}</li>
-      ))}
+      <ul>
+        {quotes.map((quote) => (
+          <li key={quote.id}>{quote.text}</li>
+        ))}
+      </ul>
     </div>
   );
 }
 
-export default App;
+export default withPreloader(App, orderAxios);

@@ -1,18 +1,26 @@
 import React from "react";
 import { useState } from "react";
+import Spinner from "../../components/Spinner/Spinner";
 
-export default (WrappedComponent, axios) => {
-  const hocComponent = (props) => {
-    const [loading, setLoading] = useState(false);
+function withPreloader(WrappedComponent, axios) {
+  return (props) => {
+    const [loading, setLoading] = useState(null);
     axios.interceptors.request.use((res) => {
       setLoading(true);
       return res;
     });
     axios.interceptors.response.use((res) => {
-        setLoading(false);
-        return res;
-      });
-    return <><WrappedComponent {...props} /></>;
+      setLoading(false);
+      return res;
+    });
+    console.log(props);
+    return (
+      <div>
+        <Spinner show={loading} />
+        <WrappedComponent {...props} />
+      </div>
+    );
   };
-  return hocComponent;
-};
+}
+
+export default withPreloader;
